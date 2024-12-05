@@ -11,6 +11,20 @@ pipeline {
             }
         }
 
+        stage('SonarQube analysis') {
+                            steps {
+                                script {
+                                    withSonarQubeEnv('sq-receptor') {
+                                        bat """
+                                            mvn clean verify sonar:sonar ^
+                                                -Dsonar.projectKey=receptor-service  ^
+                                                -Dsonar.projectName="receptor-service "
+                                        """
+                                    }
+                                }
+                            }
+                        }
+
       stage('Construir Imagem Docker') {
           steps {
               script {
